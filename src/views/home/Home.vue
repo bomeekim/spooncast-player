@@ -1,81 +1,84 @@
 <template>
-  <v-card elevation="0">
-    <v-card-text v-if="!isLoggedIn">
-      <login-guide />
-    </v-card-text>
-    <v-card-text v-else>
-      <welcome-card />
-      <today-card />
-      <fan-board-card
-        v-if="messageList.length > 0"
-        :message-list="messageList"
-      />
-    </v-card-text>
-  </v-card>
+  <v-main class="rounded-b-lg glassmorphism">
+    <v-container class="fill-height">
+      <v-row>
+        <v-col>
+          <card-list-with-title
+            title="스푼 Pick"
+            :list="spoonPickCastList"
+          />
+        </v-col>
+        <v-col class="main pl-0">
+          <player-guide />
+          <audio-player />
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-main>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
-import LoginGuide from '../../components/LoginGuide.vue';
-import WelcomeCard from './components/WelcomeCard.vue';
-import TodayCard from './components/TodayCard.vue';
-import FanBoardCard from './components/FanBoardCard.vue';
-import { SPOON_CAST_API } from '../../api/spooncast';
+import PlayerGuide from '../../components/PlayerGuide.vue';
+import AudioPlayer from './components/AudioPlayer.vue';
+import CardListWithTitle from '../../components/CardListWithTitle.vue';
 
-const {
-  mapGetters: mapGettersApp,
-} = createNamespacedHelpers('app');
+// eslint-disable-next-line no-unused-vars
+const { mapGetters: mapGettersCast, mapActions: mapActionsCast } = createNamespacedHelpers('cast');
 
 export default {
   name: 'Home',
 
   components: {
-    WelcomeCard,
-    LoginGuide,
-    TodayCard,
-    FanBoardCard,
+    PlayerGuide,
+    AudioPlayer,
+    CardListWithTitle,
   },
 
   data: () => ({
-    messageList: [],
-    next: null,
+    test: {},
   }),
 
   computed: {
-    ...mapGettersApp([
-      'userInfo',
-      'isLoggedIn',
+    ...mapGettersCast([
+      'spoonPickCastList',
+      'last7DaysTopCastList',
+      'recommendCastList',
+      'categoryList',
     ]),
   },
 
-  watch: {
-    'userInfo.id': {
-      immediate: true,
-      handler(newVal) {
-        if (newVal) {
-          this.getFanBoardMessages();
-        }
-      },
-    },
+  created() {
+    this.getSpoonPickCastList();
+    this.getLast7DaysTopCastList({ size: 5 });
+    this.getCategoryList();
+    this.getRecommendCastList({ size: 5, id: 101 });
   },
 
   methods: {
-    async getFanBoardMessages() {
-      try {
-        // const { next, results } = await SPOON_CAST_API.FAN_BOARD(this.userInfo.id);
-        const { next, results } = await SPOON_CAST_API.FAN_BOARD(7210878);
-
-        if (results) {
-          this.next = next;
-          this.messageList = results;
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    },
+    ...mapActionsCast([
+      'getSpoonPickCastList',
+      'getLast7DaysTopCastList',
+      'getCategoryList',
+      'getRecommendCastList',
+      'getTrendCastList',
+    ]),
   },
 };
 </script>
 
 <style scoped>
+.container {
+  max-width: 100% !important;
+}
+
+.row {
+  height: inherit;
+  width: inherit;
+}
+
+.col {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
 </style>
