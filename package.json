@@ -13,6 +13,8 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@egjs/flicking-plugins": "^4.1.0",
+    "@egjs/vue-flicking": "^4.2.1",
     "@mdi/font": "^5.9.55",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",

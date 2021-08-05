@@ -2,7 +2,7 @@
   <v-main class="rounded-b-lg glassmorphism">
     <v-container class="fill-height">
       <v-row>
-        <v-col>
+        <v-col cols="8">
           <v-tabs-items v-model="currentTab.index">
             <v-tab-item
               v-for="item in tabMenu"
@@ -18,7 +18,7 @@
             </v-tab-item>
           </v-tabs-items>
         </v-col>
-        <v-col class="main pl-0">
+        <v-col class="main pl-0" cols="4">
           <audio-player v-if="showMusicPlayer" />
           <player-guide v-else />
         </v-col>
@@ -75,40 +75,23 @@ export default {
 
   watch: {
     currentTab(newVal) {
-      console.log(newVal);
       if (!newVal) return;
 
       this.currentComponent = newVal.component;
     },
   },
 
-  // watch: {
-  //   currentTab: {
-  //     handler(index) {
-  //       this.title = this.tabMenu[index];
-  //
-  //       // TODO 수정해야함!
-  //       switch (index) {
-  //         case 0:
-  //           this.list = this.spoonPickCastList;
-  //           break;
-  //         case 1:
-  //           this.list = this.recommendCastList;
-  //           break;
-  //         case 2:
-  //           this.list = this.last7DaysTopCastList;
-  //           break;
-  //         default:
-  //           break;
-  //       }
-  //     },
-  //   },
-  // },
-
   created() {
+    // 스푼PICK 캐스트 조회
     this.getSpoonPickCastList();
+
+    // 최근 7일 기준 인기 캐스트 조회
     this.getLast7DaysTopCastList({ size: 5 });
+
+    // 캐스트 카테고리 조회
     this.getCategoryList();
+
+    // TODO ForYou 컴포넌트로 이동
     this.getRecommendCastList({ size: 5, id: 101 });
   },
 
