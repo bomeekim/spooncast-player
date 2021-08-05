@@ -22,7 +22,6 @@ const actions = {
   getSpoonPickCastList: async ({ commit }) => {
     try {
       const { results } = await CAST_API.SPOON_PICK();
-      console.log(results);
 
       if (results) {
         commit('setSpoonPickCastList', results);
@@ -35,7 +34,6 @@ const actions = {
     try {
       const { size } = payload;
       const { results } = await CAST_API.TOP(size);
-      console.log(results);
 
       if (results) {
         commit('setLast7DaysTopCastList', results);

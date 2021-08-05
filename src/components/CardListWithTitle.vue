@@ -1,5 +1,8 @@
 <template>
-  <v-card>
+  <v-card
+    flat
+    :ripple="false"
+  >
     <v-card-title>
       <p>{{ title }}</p>
       <v-spacer />
@@ -20,6 +23,8 @@
           max-width="250"
           class="justify-center"
           flat
+          :ripple="false"
+          @click="$emit('click:item', item)"
         >
           <v-card-text class="justify-center mx-auto">
             <v-img

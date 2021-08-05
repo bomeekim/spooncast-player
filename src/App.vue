@@ -1,17 +1,20 @@
 <template>
   <v-app class="pa-10">
-    <Home />
+    <Header />
+    <Main />
   </v-app>
 </template>
 
 <script>
-import Home from './views/home/Home.vue';
+import Header from './layout/Header.vue';
+import Main from './layout/Main.vue';
 
 export default {
   name: 'App',
 
   components: {
-    Home,
+    Header,
+    Main,
   },
 };
 </script>

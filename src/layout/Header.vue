@@ -13,14 +13,14 @@
       slider-color="black"
     >
       <v-tab
-        v-for="item in tabMenu"
-        :key="item"
+        v-for="(item, index) in tabMenu"
+        :key="index"
       >
-        {{ item }}
+        {{ item.name }}
       </v-tab>
     </v-tabs>
     <v-app-bar-title>
-      <v-icon>mdi-cog-outline</v-icon>
+      <v-icon>mdi-shuffle-variant</v-icon>
     </v-app-bar-title>
   </v-app-bar>
 </template>
@@ -48,8 +48,8 @@ export default {
   },
 
   watch: {
-    tab(newVal) {
-      this.setCurrentTab(newVal);
+    tab(index) {
+      this.setCurrentTab(this.tabMenu[index]);
     },
   },
 

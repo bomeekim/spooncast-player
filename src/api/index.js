@@ -10,7 +10,6 @@ connection.defaults.responseType = 'json';
 
 connection.interceptors.response.use(
   (response) => {
-    console.log(response);
     const { status, data, headers: { link } } = response;
 
     switch (status) {

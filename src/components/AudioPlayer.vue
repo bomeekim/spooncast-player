@@ -119,6 +119,23 @@
         </div>
       </v-card-text>
 
+      <v-list
+        dense
+        two-line
+      >
+        <v-list-item
+          v-for="(item, index) in musicPlaylist"
+          :key="item.title"
+          link
+          @click="currentSong = index, drawer = false"
+        >
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-subtitle>{{ item.author.nickname }}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+
       <v-navigation-drawer
         v-model="drawer"
         absolute
@@ -146,18 +163,16 @@
 </template>
 
 <script>
-// import { SPOON_CAST_API } from '@/api/spooncast';
-// import { SPOON_CAST_URL } from '@/api/url';
-// import { getCountryCode } from '@/utils/i18n';
-
 import moment from 'moment';
+import { createNamespacedHelpers } from 'vuex';
+
+const { mapGetters: mapGettersApp } = createNamespacedHelpers('app');
 
 export default {
   name: 'AudioPlayer',
 
   data: () => ({
     drawer: null,
-    musicPlaylist: [],
     isLoading: true,
     likeIcon: 'mdi-heart-outline',
 
@@ -173,26 +188,26 @@ export default {
   }),
 
   computed: {
-    // userInfo() {
-    //   return this.$store.getters['app/userInfo'];
-    // },
+    ...mapGettersApp([
+      'musicPlaylist',
+    ]),
+  },
 
-    // spooncastUrl() {
-    //   if (!!this.userInfo && !!this.userInfo.country) {
-    //     return SPOON_CAST_URL(this.userInfo.country);
-    //   }
-    //   return SPOON_CAST_URL(getCountryCode());
-    // },
+  watch: {
+    musicPlaylist: {
+      deep: true,
+      handler(newVal) {
+        if (newVal && newVal.length > 0) {
+          this.loadAudio();
+        }
+      },
+    },
   },
 
   created() {
     // 오디오 플레이어 관련 설정을 한다.
     this.createAudio();
     this.addAudioEventListener();
-
-    if (this.musicPlaylist && this.musicPlaylist.length > 0) {
-      this.loadAudio();
-    }
   },
 
   methods: {
