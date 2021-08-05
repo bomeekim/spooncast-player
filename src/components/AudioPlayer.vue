@@ -1,12 +1,11 @@
 <template>
   <div>
     <v-card
-      elevation="15"
-      max-width="350"
-      height="470"
-      class="justify-center mx-auto rounded-lg"
+      class="default-v-card pa-5 justify-center"
+      elevation="0"
+      height="calc(100vh - 145px)"
     >
-      <v-card-title class="pa-2">
+      <v-card-title class="pt-2 pb-6">
         <v-btn
           icon
           @click.stop="drawer = !drawer"
@@ -35,13 +34,17 @@
       </v-card-title>
 
       <v-card-text v-if="!!musicPlaylist[currentSong]">
-        <!--캐스트 정보-->
         <v-img
           :key="currentSong"
-          class="ma-2 rounded-lg"
-          max-height="170"
+          class="rounded-lg"
+          width="calc(100vw)"
+          max-height="500"
+          aspect-ratio="1"
           :src="musicPlaylist[currentSong].image"
         />
+      </v-card-text>
+      <v-card-actions class="flex-column">
+        <!--캐스트 정보-->
         <p
           class="font-weight-bold text-h6 black--text pt-4 ma-0"
         >
@@ -57,58 +60,55 @@
         </v-btn>
 
         <!--컨트롤러-->
-        <div
-          class="controller-container"
+        <v-row
+          no-gutters
+          align="center"
+          class="justify-center"
         >
-          <div
-            class="play-controller"
+          <v-btn
+            :disabled="currentSong <= 0"
+            icon
+            @click="handleClickSkipPrevious"
           >
-            <v-btn
-              :disabled="currentSong <= 0"
-              icon
-              @click="handleClickSkipPrevious"
-            >
-              <v-icon>mdi-skip-previous</v-icon>
-            </v-btn>
-            <v-btn
-              v-if="isPaused"
-              icon
-              x-large
-              color="#ff4100"
-              :disabled="!musicPlaylist"
-              @click="handleClickPlay"
-            >
-              <v-icon>mdi-play-circle</v-icon>
-            </v-btn>
-            <v-btn
-              v-if="!isPaused"
-              icon
-              x-large
-              @click="handleClickPause"
-            >
-              <v-icon>mdi-pause</v-icon>
-            </v-btn>
-            <v-btn
-              icon
-              :disabled="musicPlaylist.length - 1 === currentSong"
-              @click="handleClickSkipNext"
-            >
-              <v-icon>mdi-skip-next</v-icon>
-            </v-btn>
-          </div>
-        </div>
-        <div
-          class="progress-controller"
-        >
-          <v-row class="justify-space-between mt-4 mr-4 mb-0 ml-4">
-            <p class="ma-0">
-              {{ getDuration(currentTime) }}
-            </p>
-            <p class="ma-0">
-              {{ getDuration(musicPlaylist[currentSong].duration) }}
-            </p>
-          </v-row>
+            <v-icon>mdi-skip-previous</v-icon>
+          </v-btn>
+          <v-btn
+            v-if="isPaused"
+            icon
+            x-large
+            color="#ff4100"
+            :disabled="!musicPlaylist"
+            @click="handleClickPlay"
+          >
+            <v-icon>mdi-play-circle</v-icon>
+          </v-btn>
+          <v-btn
+            v-else
+            icon
+            x-large
+            @click="handleClickPause"
+          >
+            <v-icon>mdi-pause</v-icon>
+          </v-btn>
+          <v-btn
+            icon
+            :disabled="musicPlaylist.length - 1 === currentSong"
+            @click="handleClickSkipNext"
+          >
+            <v-icon>mdi-skip-next</v-icon>
+          </v-btn>
+        </v-row>
 
+        <v-row class="justify-space-between mt-4 mr-4 mb-0 ml-4">
+          <p class="ma-0">
+            {{ getDuration(currentTime) }}
+          </p>
+          <p class="ma-0">
+            {{ getDuration(musicPlaylist[currentSong].duration) }}
+          </p>
+        </v-row>
+
+        <v-row>
           <v-slider
             color="#ff4100"
             :min="0"
@@ -116,25 +116,8 @@
             :value="playProgress"
             @change="handleChangeProgress"
           />
-        </div>
-      </v-card-text>
-
-      <v-list
-        dense
-        two-line
-      >
-        <v-list-item
-          v-for="(item, index) in musicPlaylist"
-          :key="item.title"
-          link
-          @click="currentSong = index, drawer = false"
-        >
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-            <v-list-item-subtitle>{{ item.author.nickname }}</v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+        </v-row>
+      </v-card-actions>
 
       <v-navigation-drawer
         v-model="drawer"
@@ -149,7 +132,7 @@
             v-for="(item, index) in musicPlaylist"
             :key="item.title"
             link
-            @click="currentSong = index, drawer = false"
+            @click="handleClickInPlaylist(index)"
           >
             <v-list-item-content>
               <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -173,7 +156,7 @@ export default {
 
   data: () => ({
     drawer: null,
-    isLoading: true,
+    // isLoading: true,
     likeIcon: 'mdi-heart-outline',
 
     // 컨트롤러
@@ -194,13 +177,10 @@ export default {
   },
 
   watch: {
-    musicPlaylist: {
-      deep: true,
-      handler(newVal) {
-        if (newVal && newVal.length > 0) {
-          this.loadAudio();
-        }
-      },
+    currentSong(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.loadAudio();
+      }
     },
   },
 
@@ -208,6 +188,11 @@ export default {
     // 오디오 플레이어 관련 설정을 한다.
     this.createAudio();
     this.addAudioEventListener();
+  },
+
+  mounted() {
+    // 오디오 플레이어 데이터를 초기화한다.
+    this.loadAudio();
   },
 
   methods: {
@@ -271,6 +256,7 @@ export default {
      * 오디오플레이어를 데이터를 초기화 하는 함수
      */
     loadAudio() {
+      console.log('loadAudio: ', this.musicPlaylist[this.currentSong].url);
       this.musicAudio.src = this.musicPlaylist[this.currentSong].url;
       this.musicAudio.load();
     },
@@ -355,6 +341,13 @@ export default {
       this.musicAudio.src = this.musicPlaylist[this.currentSong].url;
     },
 
+    handleClickInPlaylist(index) {
+      this.setStop();
+      this.drawer = false;
+      this.currentSong = index;
+      this.musicAudio.src = this.musicPlaylist[this.currentSong].url;
+    },
+
     /**
      * 오디오의 길이를 mm:ss 포맷으로 변경하는 함수
      * @param sec 오디오의 길이 (초)
@@ -405,5 +398,9 @@ export default {
 </script>
 
 <style scoped>
-
+.v-card__actions,
+.row {
+  width: inherit;
+  min-width: 300px;
+}
 </style>

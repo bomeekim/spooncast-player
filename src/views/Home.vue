@@ -1,22 +1,25 @@
 <template>
-  <div>
+  <v-card height="calc(100vh - 145px)">
     <card-list-with-title
-      class="pb-16"
+      class="py-6 px-10"
       title="스푼PICK"
       :list="spoonPickCastList"
+      @click:item="handleClickItem"
     />
     <card-list-with-title
-      class="mt-16"
+      class="py-6 px-10"
       title="최근 7일 Top"
       :list="convertedLast7DaysTopCastList"
+      @click:item="handleClickItem"
     />
-  </div>
+  </v-card>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
 import CardListWithTitle from '../components/CardListWithTitle.vue';
 
+const { mapMutations: mapMutationsApp } = createNamespacedHelpers('app');
 const { mapGetters: mapGettersCast } = createNamespacedHelpers('cast');
 
 export default {
@@ -42,6 +45,30 @@ export default {
         updown: obj.updown,
         ...obj.cast,
       }));
+    },
+  },
+
+  methods: {
+    ...mapMutationsApp([
+      'setMusicPlaylist',
+    ]),
+
+    handleClickItem(item) {
+      console.log('handleClickItem', item);
+
+      if (!item) return;
+
+      this.setMusicPlaylist({
+        id: item.id,
+        title: item.title,
+        author: {
+          nickname: item.author.nickname,
+          id: item.author.id,
+        },
+        url: item.voice_url,
+        image: item.img_url,
+        duration: item.duration,
+      });
     },
   },
 };

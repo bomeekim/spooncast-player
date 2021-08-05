@@ -8,12 +8,9 @@
               v-for="item in tabMenu"
               :key="item.name"
             >
-<!--              <v-card>-->
-<!--                {{ item.component }}-->
-<!--              </v-card>-->
               <component
                 :is="currentComponent"
-                class="tab"
+                class="tab default-v-card"
               />
             </v-tab-item>
           </v-tabs-items>
@@ -35,7 +32,7 @@ import Home from '../views/Home.vue';
 import ForYou from '../views/ForYou.vue';
 
 // eslint-disable-next-line no-unused-vars
-const { mapGetters: mapGettersApp, mapMutations: mapMutationsApp } = createNamespacedHelpers('app');
+const { mapGetters: mapGettersApp } = createNamespacedHelpers('app');
 const { mapGetters: mapGettersCast, mapActions: mapActionsCast } = createNamespacedHelpers('cast');
 
 export default {
@@ -103,28 +100,6 @@ export default {
       'getRecommendCastList',
       'getTrendCastList',
     ]),
-
-    ...mapMutationsApp([
-      'setMusicPlaylist',
-    ]),
-
-    handleClickItem(item) {
-      console.log('handleClickItem', item);
-
-      if (!item) return;
-
-      this.setMusicPlaylist({
-        id: item.id,
-        title: item.title,
-        author: {
-          nickname: item.author.nickname,
-          id: item.author.id,
-        },
-        url: item.voice_url,
-        image: item.img_url,
-        duration: item.duration,
-      });
-    },
   },
 };
 </script>
