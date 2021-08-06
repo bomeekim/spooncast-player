@@ -1,71 +1,93 @@
 <template>
   <div>
     <v-card
-      class="default-v-card pa-5 justify-center"
+      class="default-v-card justify-center"
       elevation="0"
       height="calc(100vh - 145px)"
+      min-width="380"
     >
-      <v-card-title class="pt-2 pb-6">
-        <v-btn
-          icon
-          @click.stop="drawer = !drawer"
-        >
-          <v-icon>mdi-menu</v-icon>
-        </v-btn>
-        <!--        <v-spacer />-->
-        <!--        <v-tooltip-->
-        <!--          v-if="!!userInfo.authKey"-->
-        <!--          bottom-->
-        <!--        >-->
-        <!--          <template v-slot:activator="{ on, attrs }">-->
-        <!--            <v-btn-->
-        <!--              icon-->
-        <!--              v-bind="attrs"-->
-        <!--              v-on="on"-->
-        <!--              @click.stop="handleCastLikeClick"-->
-        <!--            >-->
-        <!--              <v-icon color="primary">-->
-        <!--                {{ likeIcon }}-->
-        <!--              </v-icon>-->
-        <!--            </v-btn>-->
-        <!--          </template>-->
-        <!--          <span>Like</span>-->
-        <!--        </v-tooltip>-->
+      <v-card-title class="justify-center py-7">
+        <p class="text-caption font-weight-bold">
+          {{ musicPlaylist[currentSong].author.nickname }}
+        </p>
+<!--        <v-spacer />-->
+<!--        <v-btn-->
+<!--          icon-->
+<!--        >-->
+<!--          <v-icon>mdi-dots-horizontal</v-icon>-->
+<!--        </v-btn>-->
       </v-card-title>
 
-      <v-card-text v-if="!!musicPlaylist[currentSong]">
+      <v-card-text
+        v-if="!!musicPlaylist[currentSong]"
+        class="px-10"
+      >
+        <!--캐스트 썸네일-->
         <v-img
           :key="currentSong"
           class="rounded-lg"
           width="calc(100vw)"
-          max-height="500"
+          max-height="480"
           aspect-ratio="1"
           :src="musicPlaylist[currentSong].image"
         />
-      </v-card-text>
-      <v-card-actions class="flex-column">
-        <!--캐스트 정보-->
-        <p
-          class="font-weight-bold text-h6 black--text pt-4 ma-0"
-        >
-          {{ musicPlaylist[currentSong].title }}
-        </p>
-        <v-btn
-          class="font-weight-light black--text"
-          small
-          text
-          @click="showAuthorProfile"
-        >
-          {{ musicPlaylist[currentSong].author.nickname }}
-        </v-btn>
 
-        <!--컨트롤러-->
+        <!--캐스트 제목, 올린사람 닉네임, 하트-->
+        <v-list-item
+          class="px-0 pt-10"
+          two-line
+        >
+          <v-list-item-content>
+            <v-list-item-title
+              class="text-xl-h5 text-lg-h5 text-h6 font-weight-bold mb-2"
+            >
+              {{ musicPlaylist[currentSong].title }}
+            </v-list-item-title>
+            <v-list-item-subtitle
+              class="text-xl-subtitle-1 text-lg-subtitle-1 text-subtitle-2"
+            >
+              {{ musicPlaylist[currentSong].author.nickname }}
+            </v-list-item-subtitle>
+          </v-list-item-content>
+          <v-list-item-action>
+            <v-icon>{{ likeIcon }}</v-icon>
+          </v-list-item-action>
+        </v-list-item>
+
+        <!--슬라이더-->
+        <v-slider
+          class="pb-2"
+          color="#ff4100"
+          :min="0"
+          :max="100"
+          :value="playProgress"
+          hide-details
+          track-color="white"
+          @change="handleChangeProgress"
+        />
+
+        <v-row class="justify-space-between px-4">
+          <p class="ma-0 text-caption">
+            {{ getDuration(currentTime) }}
+          </p>
+          <p class="ma-0 text-caption">
+            {{ getDuration(musicPlaylist[currentSong].duration) }}
+          </p>
+        </v-row>
+
         <v-row
           no-gutters
           align="center"
-          class="justify-center"
+          class="justify-center pt-5 pb-10"
         >
           <v-btn
+            class="btn-shuffle"
+            icon
+          >
+            <v-icon>mdi-shuffle-variant</v-icon>
+          </v-btn>
+          <v-btn
+            class="btn-prev"
             :disabled="currentSong <= 0"
             icon
             @click="handleClickSkipPrevious"
@@ -74,8 +96,8 @@
           </v-btn>
           <v-btn
             v-if="isPaused"
+            class="btn-play"
             icon
-            x-large
             color="#ff4100"
             :disabled="!musicPlaylist"
             @click="handleClickPlay"
@@ -84,39 +106,47 @@
           </v-btn>
           <v-btn
             v-else
+            class="btn-pause"
             icon
-            x-large
             @click="handleClickPause"
           >
             <v-icon>mdi-pause</v-icon>
           </v-btn>
           <v-btn
+            class="btn-next"
             icon
             :disabled="musicPlaylist.length - 1 === currentSong"
             @click="handleClickSkipNext"
           >
             <v-icon>mdi-skip-next</v-icon>
           </v-btn>
+          <v-btn
+            class="btn-repeat"
+            icon
+          >
+            <v-icon>mdi-repeat</v-icon>
+          </v-btn>
         </v-row>
+      </v-card-text>
 
-        <v-row class="justify-space-between mt-4 mr-4 mb-0 ml-4">
-          <p class="ma-0">
-            {{ getDuration(currentTime) }}
-          </p>
-          <p class="ma-0">
-            {{ getDuration(musicPlaylist[currentSong].duration) }}
-          </p>
-        </v-row>
+      <v-card-actions class="justify-space-between px-10">
+        <v-btn
+          class="font-weight-light"
+          text
+          x-small
+        >
+          연관 캐스트
+          <v-icon class="mt-1 mdi-dark">
+            mdi-chevron-up
+          </v-icon>
+        </v-btn>
 
-        <v-row>
-          <v-slider
-            color="#ff4100"
-            :min="0"
-            :max="100"
-            :value="playProgress"
-            @change="handleChangeProgress"
-          />
-        </v-row>
+        <v-btn
+          icon
+          @click.stop="drawer = !drawer"
+        >
+          <v-icon>mdi-menu</v-icon>
+        </v-btn>
       </v-card-actions>
 
       <v-navigation-drawer
@@ -398,9 +428,40 @@ export default {
 </script>
 
 <style scoped>
-.v-card__actions,
-.row {
-  width: inherit;
-  min-width: 300px;
+/*TODO 버튼 반응형 작업*/
+.btn-play,
+.btn-pause {
+  width: 68px;
+  height: 68px;
+  margin: 0 16px;
 }
+
+.btn-play i.v-icon,
+.btn-pause i.v-icon {
+  font-size: 68px;
+}
+
+.btn-prev,
+.btn-next {
+  width: 44px;
+  height: 44px;
+}
+
+.btn-prev i.v-icon,
+.btn-next i.v-icon {
+  font-size: 44px;
+}
+
+.btn-shuffle,
+.btn-repeat {
+  width: 20px;
+  height: 20px;
+  margin: 0 12px;
+}
+
+.btn-shuffle i.v-icon,
+.btn-repeat i.v-icon {
+  font-size: 20px;
+}
+
 </style>

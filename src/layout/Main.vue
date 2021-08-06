@@ -15,7 +15,10 @@
             </v-tab-item>
           </v-tabs-items>
         </v-col>
-        <v-col class="main pl-0" cols="4">
+        <v-col
+          class="main pl-0"
+          cols="4"
+        >
           <audio-player v-if="showMusicPlayer" />
           <player-guide v-else />
         </v-col>

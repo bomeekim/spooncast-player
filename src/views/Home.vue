@@ -1,5 +1,7 @@
 <template>
-  <v-card height="calc(100vh - 145px)">
+  <v-card
+    height="calc(100vh - 145px)"
+  >
     <card-list-with-title
       class="py-6 px-10"
       title="스푼PICK"
