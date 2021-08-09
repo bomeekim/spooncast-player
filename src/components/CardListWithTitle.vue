@@ -46,28 +46,26 @@
                   :src="item.img_url"
                   height="220"
                 >
-                  <v-expand-transition>
-                    <div
-                      v-if="hover"
-                      class="hover-card
-                             d-flex
-                             text-h5
-                             justify-center
-                             align-center
-                             align-content-center"
-                    >
-                      <p>
-                        <span>
-                          <v-icon>mdi-heart</v-icon>
-                          {{ item.like_count }}
-                        </span>
-                        <span>
-                          <v-icon>mdi-play</v-icon>
-                          {{ item.play_count }}
-                        </span>
-                      </p>
-                    </div>
-                  </v-expand-transition>
+                  <div
+                    v-if="hover"
+                    class="hover-card
+                           d-flex
+                           text-h5
+                           justify-center
+                           align-center
+                           align-content-center"
+                  >
+                    <p>
+                      <span>
+                        <v-icon>mdi-heart</v-icon>
+                        {{ item.like_count }}
+                      </span>
+                      <span>
+                        <v-icon>mdi-play</v-icon>
+                        {{ item.play_count }}
+                      </span>
+                    </p>
+                  </div>
                 </v-img>
                 <span
                   class="d-inline-block text-truncate subtitle-1 font-weight-medium"
@@ -86,10 +84,10 @@
 </template>
 <script>
 import { Flicking } from '@egjs/vue-flicking';
-import { AutoPlay, Fade } from '@egjs/flicking-plugins';
+// import { AutoPlay, Fade } from '@egjs/flicking-plugins';
 
 // const plugins = [new AutoPlay({ duration: 2000, direction: 'NEXT', stopOnHover: false })];
-const plugins = [new Fade(), new AutoPlay(2000, 'NEXT')];
+// const plugins = [new Fade(), new AutoPlay(2000, 'NEXT')];
 
 export default {
   name: 'CardListWithTitle',
@@ -111,7 +109,7 @@ export default {
   },
 
   data: () => ({
-    plugins,
+    // plugins,
   }),
 };
 </script>

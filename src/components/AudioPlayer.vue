@@ -145,7 +145,7 @@
           icon
           @click.stop="drawer = !drawer"
         >
-          <v-icon>mdi-menu</v-icon>
+          <v-icon>mdi-playlist-music</v-icon>
         </v-btn>
       </v-card-actions>
 
