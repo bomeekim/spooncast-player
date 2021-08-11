@@ -1,6 +1,8 @@
 import { CAST_API } from '../../api/cast';
+import CATEGORIES from '../../constants/categories';
 
 const state = {
+  recentlyCastList: [],
   spoonPickCastList: [],
   last7DaysTopCastList: [],
   recommendCastList: [],
@@ -10,6 +12,7 @@ const state = {
 };
 
 const getters = {
+  recentlyCastList: (state) => state.recentlyCastList,
   spoonPickCastList: (state) => state.spoonPickCastList,
   last7DaysTopCastList: (state) => state.last7DaysTopCastList,
   recommendCastList: (state) => state.recommendCastList,
@@ -19,6 +22,17 @@ const getters = {
 };
 
 const actions = {
+  getRecentlyCastList: async ({ commit }) => {
+    try {
+      const { results } = await CAST_API.RECENT();
+
+      if (results) {
+        commit('setRecentlyCastList', results);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  },
   getSpoonPickCastList: async ({ commit }) => {
     try {
       const { results } = await CAST_API.SPOON_PICK();
@@ -59,7 +73,10 @@ const actions = {
       const { results } = await CAST_API.CATEGORIES();
 
       if (results) {
-        commit('setCategoryList', results);
+        commit('setCategoryList', results.map((obj) => ({
+          ...CATEGORIES.find((item) => item.category === obj.category),
+          count: obj.count,
+        })));
       }
     } catch (err) {
       console.error(err);
@@ -92,6 +109,9 @@ const actions = {
 };
 
 const mutations = {
+  setRecentlyCastList: (state, list) => {
+    state.recentlyCastList = list;
+  },
   setSpoonPickCastList: (state, list) => {
     state.spoonPickCastList = list;
   },

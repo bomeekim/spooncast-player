@@ -6,6 +6,10 @@ export const CAST_API = {
    */
   SPOON_PICK: () => connection.get('/casts/featured/'),
   /**
+   * 최신 캐스트 조회 API
+   */
+  RECENT: () => connection.get('casts/recent/'),
+  /**
    * 스푼캐스트 최근 7일 TOP 100 조회 API
    */
   TOP: (size = 10) => connection.get(`/ranks/cast?v=2&page_size=${size}`),

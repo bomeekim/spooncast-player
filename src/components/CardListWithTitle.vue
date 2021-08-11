@@ -83,7 +83,6 @@
   </div>
 </template>
 <script>
-import { Flicking } from '@egjs/vue-flicking';
 // import { AutoPlay, Fade } from '@egjs/flicking-plugins';
 
 // const plugins = [new AutoPlay({ duration: 2000, direction: 'NEXT', stopOnHover: false })];
@@ -91,10 +90,6 @@ import { Flicking } from '@egjs/vue-flicking';
 
 export default {
   name: 'CardListWithTitle',
-
-  components: {
-    Flicking,
-  },
 
   props: {
     title: {
@@ -115,8 +110,6 @@ export default {
 </script>
 
 <style scoped>
-@import url('../../node_modules/@egjs/vue-flicking/dist/flicking.css');
-
 p {
   margin: 0;
 }

@@ -2,9 +2,8 @@ import axios from 'axios';
 import parse from 'parse-link-header';
 
 export const connection = axios.create();
-const vuex = JSON.parse(localStorage.getItem('FLORA_VUEX'));
 
-connection.defaults.baseURL = ' https://kr-api.spooncast.net';
+connection.defaults.baseURL = ' https://kr-api.stgspoon.com';
 connection.defaults.headers.common['Content-Type'] = 'application/json';
 connection.defaults.responseType = 'json';
 

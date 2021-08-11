@@ -1,7 +1,11 @@
 <template>
-  <v-card
-    height="calc(100vh - 145px)"
-  >
+  <v-card>
+    <card-list-with-title
+      class="py-6 px-10"
+      title="최신 캐스트"
+      :list="recentlyCastList"
+      @click:item="handleClickItem"
+    />
     <card-list-with-title
       class="py-6 px-10"
       title="스푼PICK"
@@ -14,6 +18,22 @@
       :list="convertedLast7DaysTopCastList"
       @click:item="handleClickItem"
     />
+    <div class="py-6 px-10">
+      <Flicking :options="{ moveType: 'freeScroll', bound: true }">
+        <span
+          v-for="category in categoryList"
+          :key="category.name"
+          class="mr-2"
+        >
+          <v-chip
+            class="font-weight-medium"
+            color="white"
+          >
+            {{ category.emoji }} {{ category.name }}
+          </v-chip>
+        </span>
+      </Flicking>
+    </div>
   </v-card>
 </template>
 
@@ -33,6 +53,7 @@ export default {
 
   computed: {
     ...mapGettersCast([
+      'recentlyCastList',
       'spoonPickCastList',
       'last7DaysTopCastList',
       'categoryList',
@@ -56,8 +77,6 @@ export default {
     ]),
 
     handleClickItem(item) {
-      console.log('handleClickItem', item);
-
       if (!item) return;
 
       this.setMusicPlaylist({

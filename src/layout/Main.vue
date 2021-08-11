@@ -36,7 +36,7 @@ import ForYou from '../views/ForYou.vue';
 
 // eslint-disable-next-line no-unused-vars
 const { mapGetters: mapGettersApp } = createNamespacedHelpers('app');
-const { mapGetters: mapGettersCast, mapActions: mapActionsCast } = createNamespacedHelpers('cast');
+const { mapActions: mapActionsCast } = createNamespacedHelpers('cast');
 
 export default {
   name: 'Main',
@@ -61,13 +61,6 @@ export default {
       'musicPlaylist',
     ]),
 
-    ...mapGettersCast([
-      'spoonPickCastList',
-      'last7DaysTopCastList',
-      'recommendCastList',
-      'categoryList',
-    ]),
-
     showMusicPlayer() {
       return this.musicPlaylist && this.musicPlaylist.length > 0;
     },
@@ -82,6 +75,9 @@ export default {
   },
 
   created() {
+    // 최신 캐스트 조회
+    this.getRecentlyCastList();
+
     // 스푼PICK 캐스트 조회
     this.getSpoonPickCastList();
 
@@ -97,6 +93,7 @@ export default {
 
   methods: {
     ...mapActionsCast([
+      'getRecentlyCastList',
       'getSpoonPickCastList',
       'getLast7DaysTopCastList',
       'getCategoryList',
@@ -110,6 +107,7 @@ export default {
 <style scoped>
 .container {
   max-width: 100% !important;
+  height: calc(100vh - 145px);
 }
 
 .row {
@@ -120,5 +118,11 @@ export default {
 .col {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
+  height: inherit;
+}
+
+::v-deep .v-window.v-tabs-items {
+  overflow-y: auto;
+  height: inherit;
 }
 </style>
