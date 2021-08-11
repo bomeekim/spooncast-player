@@ -26,7 +26,14 @@ const mutations = {
     state.currentTab = currentTab;
   },
   setMusicPlaylist: (state, list) => {
-    state.musicPlaylist.push(list);
+    if (Array.isArray(list)) {
+      state.musicPlaylist = [
+        ...state.musicPlaylist,
+        ...list,
+      ];
+    } else {
+      state.musicPlaylist.push(list);
+    }
   },
 };
 

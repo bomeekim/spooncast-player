@@ -1,10 +1,18 @@
 <template>
   <div>
-    <v-row class="pa-5">
-      <p class="text-xl-h6 text-lg-h6 text-subtitle-1 font-weight-medium">
+    <v-row class="pa-5 align-baseline">
+      <p class="text-xl-h6 text-lg-h6 text-subtitle-1 font-weight-medium mr-1">
         {{ title }}
       </p>
-      <v-spacer />
+      <v-btn
+        class="text-caption"
+        small
+        text
+        @click="$emit('click:all', list)"
+      >
+        전체 듣기
+      </v-btn>
+      <v-spacer/>
       <v-btn
         class="pa-0"
         icon
@@ -102,10 +110,6 @@ export default {
       required: true,
     },
   },
-
-  data: () => ({
-    // plugins,
-  }),
 };
 </script>
 

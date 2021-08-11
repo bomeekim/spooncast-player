@@ -5,18 +5,21 @@
       title="최신 캐스트"
       :list="recentlyCastList"
       @click:item="handleClickItem"
+      @click:all="handleClickListenToAll"
     />
     <card-list-with-title
       class="py-6 px-10"
       title="스푼PICK"
       :list="spoonPickCastList"
       @click:item="handleClickItem"
+      @click:all="handleClickListenToAll"
     />
     <card-list-with-title
       class="py-6 px-10"
       title="최근 7일 Top"
       :list="convertedLast7DaysTopCastList"
       @click:item="handleClickItem"
+      @click:all="handleClickListenToAll"
     />
     <div class="py-6 px-10">
       <Flicking :options="{ moveType: 'freeScroll', bound: true }">
@@ -90,6 +93,10 @@ export default {
         image: item.img_url,
         duration: item.duration,
       });
+    },
+
+    handleClickListenToAll(list) {
+      this.setMusicPlaylist(list);
     },
   },
 };

@@ -160,7 +160,7 @@
         >
           <v-list-item
             v-for="(item, index) in musicPlaylist"
-            :key="item.title"
+            :key="item.id"
             link
             @click="handleClickInPlaylist(index)"
           >
