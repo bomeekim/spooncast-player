@@ -65,3 +65,11 @@
 .v-card__text {
   color: white;
 }
+
+.v-chip {
+  background: rgba(255, 255, 255, 0.60) !important;
+  backdrop-filter: blur(10.0px) !important;
+  -webkit-backdrop-filter: blur(10.0px) !important;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+}

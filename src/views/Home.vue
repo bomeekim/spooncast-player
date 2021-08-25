@@ -22,20 +22,29 @@
       @click:all="handleClickListenToAll"
     />
     <div class="py-6 px-10">
-      <Flicking :options="{ moveType: 'freeScroll', bound: true }">
-        <span
-          v-for="category in categoryList"
+      <p class="pl-2 text-xl-h6 text-lg-h6 text-subtitle-1 font-weight-medium mr-1">
+        테마로 즐기는 캐스트
+      </p>
+      <v-chip-group
+        active-class="category-chip__active"
+        class="px-4"
+        column
+        mandatory
+      >
+        <v-chip
+          v-for="(category, index) in categoryList"
           :key="category.name"
-          class="mr-2"
+          class="font-weight-medium mr-2"
+          @click="handleClickCategoryChip({ ...category, index })"
         >
-          <v-chip
-            class="font-weight-medium"
-            color="white"
-          >
-            {{ category.emoji }} {{ category.name }}
-          </v-chip>
-        </span>
-      </Flicking>
+          {{ category.emoji }} {{ category.name }}
+        </v-chip>
+      </v-chip-group>
+      <card-list-with-title
+        :list="trendCastList"
+        class="py-6 px-10"
+        @click:item="handleClickItem"
+      />
     </div>
   </v-card>
 </template>
@@ -45,7 +54,11 @@ import { createNamespacedHelpers } from 'vuex';
 import CardListWithTitle from '../components/CardListWithTitle.vue';
 
 const { mapMutations: mapMutationsApp } = createNamespacedHelpers('app');
-const { mapGetters: mapGettersCast } = createNamespacedHelpers('cast');
+const {
+  mapGetters: mapGettersCast,
+  mapMutations: mapMutationsCast,
+  mapActions: mapActionsCast,
+} = createNamespacedHelpers('cast');
 
 export default {
   name: 'Home',
@@ -60,6 +73,7 @@ export default {
       'spoonPickCastList',
       'last7DaysTopCastList',
       'categoryList',
+      'trendCastList',
     ]),
 
     convertedLast7DaysTopCastList() {
@@ -74,9 +88,34 @@ export default {
     },
   },
 
+  watch: {
+    categoryList: {
+      handler(newVal) {
+        if (newVal && newVal.length > 0) {
+          this.getTrendCastList({
+            size: 30,
+            category: this.categoryList[this.selectedCategoryIndex].category,
+          });
+        }
+      },
+    },
+  },
+
+  data: () => ({
+    selectedCategoryIndex: 0,
+  }),
+
   methods: {
     ...mapMutationsApp([
       'setMusicPlaylist',
+    ]),
+
+    ...mapMutationsCast([
+      'setTrendCastList',
+    ]),
+
+    ...mapActionsCast([
+      'getTrendCastList',
     ]),
 
     handleClickItem(item) {
@@ -98,10 +137,28 @@ export default {
     handleClickListenToAll(list) {
       this.setMusicPlaylist(list);
     },
+
+    handleClickCategoryChip(chip) {
+      const { index, category } = chip;
+
+      if (this.selectedCategoryIndex !== index) {
+        this.selectedCategoryIndex = index;
+
+        this.setTrendCastList([]);
+
+        this.getTrendCastList({
+          size: 30,
+          category,
+        });
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
-
+.category-chip__active {
+  background-color: #ff4100 !important;
+  color: white !important;
+}
 </style>

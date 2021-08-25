@@ -116,7 +116,7 @@ export default {
 }
 
 .col {
-  padding-top: 0 !important;
+  padding-top: 16px !important;
   padding-bottom: 0 !important;
   height: inherit;
 }

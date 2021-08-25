@@ -10,12 +10,12 @@
         <p class="text-caption font-weight-bold">
           {{ musicPlaylist[currentSong].author.nickname }}
         </p>
-<!--        <v-spacer />-->
-<!--        <v-btn-->
-<!--          icon-->
-<!--        >-->
-<!--          <v-icon>mdi-dots-horizontal</v-icon>-->
-<!--        </v-btn>-->
+        <!--        <v-spacer />-->
+        <!--        <v-btn-->
+        <!--          icon-->
+        <!--        >-->
+        <!--          <v-icon>mdi-dots-horizontal</v-icon>-->
+        <!--        </v-btn>-->
       </v-card-title>
 
       <v-card-text

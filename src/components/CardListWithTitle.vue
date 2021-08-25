@@ -1,6 +1,9 @@
 <template>
   <div>
-    <v-row class="pa-5 align-baseline">
+    <v-row
+      v-if="title && title.length > 0"
+      class="pa-5 align-baseline"
+    >
       <p class="text-xl-h6 text-lg-h6 text-subtitle-1 font-weight-medium mr-1">
         {{ title }}
       </p>
@@ -24,6 +27,7 @@
     </v-row>
 
     <v-card
+      v-if="list && list.length > 0"
       class="d-flex flex-nowrap"
       width="inherit"
       flat
@@ -102,7 +106,7 @@ export default {
   props: {
     title: {
       type: String,
-      required: true,
+      required: false,
     },
 
     list: {
