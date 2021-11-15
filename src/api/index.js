@@ -3,7 +3,7 @@ import parse from 'parse-link-header';
 
 export const connection = axios.create();
 
-connection.defaults.baseURL = ' https://kr-api.stgspoon.com';
+connection.defaults.baseURL = ' https://kr-api.spooncast.net';
 connection.defaults.headers.common['Content-Type'] = 'application/json';
 connection.defaults.responseType = 'json';
 

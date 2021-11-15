@@ -32,6 +32,7 @@ import { createNamespacedHelpers } from 'vuex';
 import PlayerGuide from '../components/PlayerGuide.vue';
 import AudioPlayer from '../components/AudioPlayer.vue';
 import Home from '../views/Home.vue';
+import SpoonPick from '../views/SpoonPick.vue';
 import ForYou from '../views/ForYou.vue';
 
 // eslint-disable-next-line no-unused-vars
@@ -46,6 +47,7 @@ export default {
     AudioPlayer,
     // eslint-disable-next-line vue/no-unused-components
     Home,
+    SpoonPick,
     // eslint-disable-next-line vue/no-unused-components
     ForYou,
   },

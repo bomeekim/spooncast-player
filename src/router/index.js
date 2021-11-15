@@ -8,6 +8,10 @@ const routes = [
     path: '/',
     component: () => import('../layout/Main'),
   },
+  {
+    path: '/pick',
+    component: () => import('../views/SpoonPick'),
+  },
 ];
 
 const router = new VueRouter({
