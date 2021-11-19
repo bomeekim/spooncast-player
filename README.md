@@ -1,4 +1,4 @@
-# flora
+# spooncast-player
 
 ## Project setup
 ```
